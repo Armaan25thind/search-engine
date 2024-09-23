@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Search Engine</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-image: url('https://png.pngtree.com/thumb_back/fh260/background/20190223/ourmid/pngtree-poly-cost-effective-jewelry-jewelry-leaf-geometric-minimalist-background-jewelrygeometric-backgroundcosmeticleaffreshautumn-image_65818.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-attachment: fixed;
+            font-family:Georgia, 'Times New Roman', Times, serif;
+        }
+        
+        .container {
+            width: 60%;
+            margin: 60px auto;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.85);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            border-radius: 25px;
+            text-align: center;
+            backdrop-filter: blur(12px);
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            color: #4b0082;
+            margin-bottom: 25px;
+            letter-spacing: 2.5px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        h2 {
+            font-size: 2.2rem;
+            color: #4b0082;
+            margin-bottom: 20px;
+        }
+        
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        
+        input[type="text"] {
+            flex: 1;
+            padding: 14px;
+            font-size: 20px;
+            border: 2px solid #4b0082;
+            border-radius: 30px;
+            background: #f0f0f0;
+            color: #333;
+            margin-right: 12px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        input[type="text"]:focus {
+            border-color: #ff6f61;
+            box-shadow: 0 0 10px rgba(255, 111, 97, 0.6);
+            outline: none;
+        }
+        
+        button {
+            padding: 14px 35px;
+            background: linear-gradient(135deg, #6c63ff, #ff6f61);
+            color: white;
+            font-size: 20px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: background 0.4s ease, transform 0.3s ease;
+        }
+        
+        button:hover {
+            background: linear-gradient(135deg, #ff6f61, #ff9966);
+            transform: scale(1.05);
+        }
+        
+        #clearHistoryButton {
+            background: linear-gradient(135deg, #ff4d4d, #ff9999);
+            margin-top: 15px;
+        }
+        
+        #clearHistoryButton:hover {
+            background: linear-gradient(135deg, #ff3333, #ff8585);
+            transform: scale(1.08);
+        }
+        
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        li {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 14px;
+            margin-bottom: 12px;
+            border-radius: 20px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            color: #333;
+            transition: all 0.3s ease;
+        }
+        
+        li:hover {
+            background: #ff9966;
+            color: white;
+            transform: translateY(-5px);
+        }
+        
+        </style>
+        
+</head>
+<body>
+    <div class="container">
+        <h1>Simple Search Engine</h1>
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Enter your search query">
+            <button id="searchButton">Search</button>
+        </div>
+        <button id="clearHistoryButton">Clear History</button>
+        <h2>Search History</h2>
+        <ul id="searchHistory"></ul>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('searchInput');
+    const searchButton = document.getElementById('searchButton');
+    const clearHistoryButton = document.getElementById('clearHistoryButton');
+    const searchHistory = document.getElementById('searchHistory');
+
+    let history = JSON.parse(localStorage.getItem('searchHistory')) || [];
+
+    displaySearchHistory();
+
+    searchButton.addEventListener('click', () => {
+        const searchTerm = searchInput.value.trim();
+        if (searchTerm) {
+            addToSearchHistory(searchTerm);
+            searchInput.value = '';
+        }
+    });
+
+    clearHistoryButton.addEventListener('click', () => {
+        history = [];
+        localStorage.removeItem('searchHistory');
+        displaySearchHistory();
+    });
+
+    function addToSearchHistory(term) {
+        history.unshift(term);
+        if (history.length > 10) {
+            history.pop();
+        }
+        localStorage.setItem('searchHistory', JSON.stringify(history));
+        displaySearchHistory();
+    }
+
+    function displaySearchHistory() {
+        searchHistory.innerHTML = '';
+        history.forEach(term => {
+            const li = document.createElement('li');
+            li.textContent = term;
+            searchHistory.appendChild(li);
+        });
+    }
+});
+</script>
+</html>
